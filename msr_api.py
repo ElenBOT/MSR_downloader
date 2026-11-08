@@ -61,7 +61,4 @@ def guess_date_from_cover_url(cover_url: str) -> str:
 
 
 def sanitize_filename(name: str) -> str:
-    from text_zh import to_simplified
-
-    name = to_simplified(name)
-    return _INVALID_FILENAME_CHARS.sub("", name).strip()
+    return _INVALID_FILENAME_CHARS.sub("", (name or "")).strip()

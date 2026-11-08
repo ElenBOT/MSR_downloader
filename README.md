@@ -4,7 +4,7 @@
 
 ## 功能
 
-- **標籤編輯**：瀏覽音樂資料夾、改 metadata、換封面、儲存（文字會轉成簡體）
+- **標籤編輯**：瀏覽音樂資料夾、改 metadata、換封面、儲存（API／輸入原文照存）
 - **搜尋下載**：搜尋官方曲庫、預覽標籤與封面後下載
 - **wav → FLAC**：下載時可選（需本機 `ffmpeg`）
 - **歌詞**：官方 `lyricUrl` + [LRCLIB](https://lrclib.net)，自動評分選較佳
@@ -16,7 +16,7 @@
 
 ```text
 Python 3.10+
-pip install mutagen pillow opencc-python-reimplemented
+pip install mutagen pillow
 ```
 
 下載官方 wav 並轉 FLAC 時需要 [ffmpeg](https://ffmpeg.org/)，並加入 `PATH`。
@@ -33,7 +33,7 @@ pythonw siren_app.py "C:\path\to\music_folder"
 
 ## 檔名與標籤慣例
 
-- 建議檔名：`專輯 - 標題.ext`（簡體）
+- 建議檔名：`專輯 - 標題.ext`（內容與官方／輸入一致，不做繁簡轉換）
 - Artist：官方 `artists`（多數為 `塞壬唱片-MSR`，少數含合作者）
 - Album Artist：`塞壬唱片-MSR`
 - Genre：`Game`
@@ -46,7 +46,6 @@ MSR_downloader/
   siren_app.py          # GUI 主程式
   msr_api.py            # 塞壬官方 API
   lyrics_sources.py     # 歌詞多來源與評分
-  text_zh.py            # 繁→簡
   settings.json         # 本機設定（可忽略進版控）
   賽任唱片下載器.bat
   README.md

@@ -6,14 +6,14 @@ GUI 工具，分成兩個分頁：
 
 標籤編輯
 - 瀏覽資料夾中的 MP3 / FLAC
-- 編輯常見 metadata、封面，儲存回檔案（文字會轉成簡體）
+- 編輯常見 metadata、封面，儲存回檔案
 
 搜尋下載
 - 搜尋塞壬唱片官方曲庫並下載音源
 - wav 轉 FLAC、歌詞嵌入可開關（預設開啟）
 - 歌詞：官方 lyricUrl + LRCLIB，自動選較佳並嵌入音檔
 
-需求：pip install mutagen pillow opencc-python-reimplemented
+需求：pip install mutagen pillow
 下載時若要把官方 wav 轉成 FLAC，需要 ffmpeg（加入 PATH）。
 """
 import os
@@ -37,7 +37,6 @@ from mutagen.id3 import ID3, TIT2, TPE1, TALB, TPE2, TCOM, TCON, TDRC, TRCK, API
 
 import msr_api
 from lyrics_sources import looks_instrumental, pick_best_lyrics
-from text_zh import to_simplified
 
 SUPPORTED_EXT = (".mp3", ".flac")
 COVER_BOX_SIZE = 260
@@ -716,7 +715,7 @@ class SirenApp(tk.Tk):
         self.msr_selected_detail = detail
         self.msr_selected_album = album or {}
 
-        album_name = to_simplified((self.msr_selected_album.get("name") or "").strip())
+        album_name = (self.msr_selected_album.get("name") or "").strip()
         # artists 以歌曲 detail 為準；沒有再退回列表項目或專輯內曲目的 artistes
         artists = (
             (detail or {}).get("artists")
@@ -724,10 +723,10 @@ class SirenApp(tk.Tk):
             or song.get("artistes")
             or []
         )
-        self.dl_vars["title"].set(to_simplified(song["name"]))
+        self.dl_vars["title"].set(song["name"])
         self.dl_vars["album"].set(album_name)
         self.dl_vars["albumartist"].set("塞壬唱片-MSR")
-        self.dl_vars["artist"].set(to_simplified(msr_api.format_artists(artists)))
+        self.dl_vars["artist"].set(msr_api.format_artists(artists))
         self.dl_vars["genre"].set("Game")
         self.dl_vars["composer"].set("")  # 官方 API／公開可靠來源都沒有作曲欄
         self.dl_vars["tracknumber"].set("")
@@ -811,12 +810,9 @@ class SirenApp(tk.Tk):
                 f"官方音源副檔名是「{src_ext}」，會直接存下來，但可能無法正確寫入標籤。",
             )
 
-        values = {}
-        for k, var in self.dl_vars.items():
-            raw = var.get().strip()
-            values[k] = raw if k in ("date", "tracknumber") else to_simplified(raw)
-        album_name = values.get("album") or to_simplified((album.get("name") or "").strip())
-        title = values.get("title") or to_simplified(song["name"])
+        values = {k: var.get().strip() for k, var in self.dl_vars.items()}
+        album_name = values.get("album") or (album.get("name") or "").strip()
+        title = values.get("title") or song["name"]
         base_name = f"{album_name} - {title}" if album_name else title
         suggested_name = msr_api.sanitize_filename(base_name) + final_ext
 
@@ -835,8 +831,6 @@ class SirenApp(tk.Tk):
                     msr_song=song,
                     msr_detail=detail,
                 )
-                if lyrics_text:
-                    lyrics_text = to_simplified(lyrics_text)
             except Exception as e:
                 lyrics_text = None
                 lyrics_source = None
@@ -921,12 +915,7 @@ class SirenApp(tk.Tk):
             return
 
         ext = os.path.splitext(self.current_file)[1].lower()
-        values = {}
-        for k, var in self.vars.items():
-            raw = var.get().strip()
-            values[k] = raw if k in ("date", "tracknumber") else to_simplified(raw)
-            if values[k] != raw:
-                var.set(values[k])
+        values = {k: var.get().strip() for k, var in self.vars.items()}
 
         try:
             if ext == ".flac":

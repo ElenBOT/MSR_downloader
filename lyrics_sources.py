@@ -8,7 +8,6 @@ import urllib.parse
 import urllib.request
 
 import msr_api
-from text_zh import to_simplified
 
 LRCLIB_API_BASE = "https://lrclib.net/api"
 
@@ -165,10 +164,6 @@ def pick_best_lyrics(
     msr_detail: dict | None = None,
 ) -> tuple[str | None, str | None, int]:
     """回傳 (lyrics_text, source_name, score)。"""
-    title = to_simplified(title)
-    artist = to_simplified(artist)
-    album = to_simplified(album)
-
     if looks_instrumental(title=title):
         return None, "instrumental", -1
 
@@ -177,7 +172,7 @@ def pick_best_lyrics(
     try:
         msr_text = fetch_msr_lyrics_for_song(msr_song or {}, msr_detail)
         if msr_text:
-            msr_text = to_simplified(normalize_lyrics_text(msr_text))
+            msr_text = normalize_lyrics_text(msr_text)
             sc = score_lyrics_candidate(msr_text, source="msr", title_query=title)
             if sc >= 0:
                 candidates.append((sc, msr_text, "msr"))
@@ -199,7 +194,6 @@ def pick_best_lyrics(
     for a in artist_variants:
         try:
             for sc, text, _meta in search_lrclib(title, a, album, duration)[:5]:
-                text = to_simplified(text)
                 key = text.strip()
                 if key in seen_texts:
                     continue
