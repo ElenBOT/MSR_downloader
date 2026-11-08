@@ -53,5 +53,6 @@ MSR_downloader/
 
 ## 授權與來源
 
-- 音源與封面來自 [塞壬唱片](https://monster-siren.hypergryph.com/) 公開 API，請遵守官方使用條款，僅供個人收藏。
-- 歌詞另可能來自 LRCLIB 社群資料庫。
+- 本專案程式碼採 [MIT License](LICENSE)。
+- 音源與封面來自 [塞壬唱片](https://monster-siren.hypergryph.com/) 公開 API，著作權屬原權利人；請遵守官方使用條款，建議僅供個人收藏。
+- 歌詞另可能來自 [LRCLIB](https://lrclib.net) 社群資料庫。
