@@ -2,6 +2,8 @@
 
 明日方舟「塞壬唱片」官方音樂庫的本機工具：搜尋下載、寫入標籤／封面、嵌入或另存歌詞，也可編輯已下載的 MP3／FLAC。
 
+![MSR Downloader 介面截圖](docs/screenshot.jpg)
+
 ## 功能
 
 - **標籤編輯**：瀏覽音樂資料夾、改 metadata、換封面、儲存（API／輸入原文照存）
@@ -46,6 +48,7 @@ MSR_downloader/
   siren_app.py          # GUI 主程式
   msr_api.py            # 塞壬官方 API
   lyrics_sources.py     # 歌詞多來源與評分
+  docs/screenshot.jpg   # README 截圖
   settings.json         # 本機設定（可忽略進版控）
   賽任唱片下載器.bat
   README.md
